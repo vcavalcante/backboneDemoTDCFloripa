@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <title></title>
+    <style>
+        .done {
+            text-decoration: line-through;
+
+        }
+    </style>
     <script src="~/Scripts/jquery-1.7.2.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
@@ -24,12 +30,14 @@
             defaults: {
                 "status":"incomplete"
             },
-            togleStatus:function() {
+            toggleStatus: function () {
+
                 if (this.get('status') === 'incomplete') {
                     this.set('status', 'complete');
                 } else {
                     this.set('status', 'incomplete');
                 }
+                this.save();
             }
         });
         App.Collections.Todo = Backbone.Collection.extend({
@@ -39,7 +47,11 @@
 
         App.Views.Todo = Backbone.View.extend({
             tagName: "li",
-            template: _.template("<label> <input type='checkbox'  <% if(status=='complete') print('checked') %> /> <%=description%> </label>"),
+            events: { "change input": "toggle" },
+            toggle:function() {
+                this.model.toggleStatus();
+            },
+            template: _.template("<label class=' <% if(status=='complete') print('done') %>'> <input type='checkbox'  <% if(status=='complete') print('checked') %> /> <%=description%> </label>"),
             render:function() {
                 this.$el.append(this.template(this.model.toJSON()));
                 return this.$el;
@@ -47,6 +59,11 @@
         });
 
         App.Views.Todos = Backbone.View.extend({
+            initialize:function() {
+                this.listenTo(this.collection, "add", this.addOne, this);
+                this.listenTo(this.collection, "reset", this.render, this);
+                this.listenTo(this.collection, "sync", this.render, this);
+            },
             tagName: "ul",
             render:function() {
                 this.$el.empty();
@@ -62,8 +79,8 @@
         App.Router = Backbone.Router.extend({
             initialize:function() {
                 App.Collections.todos = new App.Collections.Todo({ model: App.Models.Todo });
-                App.Collections.fetch();
-                App.Views.todos = new App.Views.Todos({el:$("#app ul"), collection: App.Collections.todos });
+                App.Views.todos = new App.Views.Todos({ el: $("#app ul"), collection: App.Collections.todos });
+                App.Collections.todos.fetch();
             },
             routes: {
                 "":"index",
@@ -73,18 +90,18 @@
             },
 
             index: function () {
-                $("#app").html("<h1>index</h1>");
+                //$("#app").html("<h1>index</h1>");
             },
             all:function() {
-                $("#app").html("<h1>All</h1>");
+                //$("#app").html("<h1>All</h1>");
             },
 
             done: function () {
-                $("#app").html("<h1>Done</h1>");
+                //$("#app").html("<h1>Done</h1>");
             },
 
             todo: function () {
-                $("#app").html("<h1>todo</h1>");
+                //$("#app").html("<h1>todo</h1>");
             },
         });
 
