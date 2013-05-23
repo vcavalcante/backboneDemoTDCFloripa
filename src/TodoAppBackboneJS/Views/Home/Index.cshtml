@@ -6,12 +6,17 @@
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
     <script type="text/javascript">
+        $(function() {
+            App.start();
+
+        });
         var App = {
             Models: {},
             Collections: {},
             Views: {},
-            start: {
-                
+            start: function () {
+                App.Router = new App.Router();
+                Backbone.history.start();
             }
         };
 
@@ -54,6 +59,34 @@
             }
         });
 
+        App.Router = Backbone.Router.extend({
+            initialize:function() {
+                App.Collections.todos = new App.Collections.Todo({ model: App.Models.Todo });
+                App.Collections.fetch();
+                App.Views.todos = new App.Views.Todos({el:$("#app ul"), collection: App.Collections.todos });
+            },
+            routes: {
+                "":"index",
+                "all": "all",
+                "done": "done",
+                "todo":"todo"
+            },
+
+            index: function () {
+                $("#app").html("<h1>index</h1>");
+            },
+            all:function() {
+                $("#app").html("<h1>All</h1>");
+            },
+
+            done: function () {
+                $("#app").html("<h1>Done</h1>");
+            },
+
+            todo: function () {
+                $("#app").html("<h1>todo</h1>");
+            },
+        });
 
     </script>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -61,7 +94,11 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="well" id="app"></div>
+                <div class="well" id="app">
+                    <ul>
+                        
+                    </ul>
+                </div>
             </div>
         </div>
 
