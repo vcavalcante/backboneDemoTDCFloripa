@@ -5,6 +5,32 @@
     <script src="~/Scripts/jquery-1.7.2.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
+    <script type="text/javascript">
+        var App = {
+            Models: {},
+            Collections: {},
+            Views: {},
+            start: {
+
+            }
+        };
+
+        App.Models.Todo = Backbone.Model.extend({
+            urlRoot: '/api/todo',
+            defaults: {
+                "status":"incomplete"
+            },
+            togleStatus:function() {
+                if (this.get('status') === 'incomplete') {
+                    this.set('status', 'complete');
+                } else {
+                    this.set('status', 'incomplete');
+                }
+            }
+        });
+        
+
+    </script>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 </head>
     <body>
