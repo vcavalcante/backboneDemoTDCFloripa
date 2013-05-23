@@ -48,14 +48,17 @@
         });
 
         App.Views.Todo = Backbone.View.extend({
+            initialize:function() {
+                this.model.on("change", this.render, this);
+            },
             tagName: "li",
             events: { "change input": "toggle" },
-            toggle:function() {
+            toggle: function () {
                 this.model.toggleStatus();
             },
             template: _.template("<label class=' <% if(status=='complete') print('done') %>'> <input type='checkbox'  <% if(status=='complete') print('checked') %> /> <%=description%> </label>"),
             render:function() {
-                this.$el.append(this.template(this.model.toJSON()));
+                this.$el.html(this.template(this.model.toJSON()));
                 return this.$el;
             }
         });
@@ -64,8 +67,6 @@
             initialize:function() {
                 this.listenTo(this.collection, "add", this.addOne, this);
                 this.listenTo(this.collection, "reset", this.render, this);
-                this.listenTo(this.collection, "destroy", this.render, this);
-
             },
             tagName: "ul",
             render: function (data) {
@@ -153,7 +154,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </a>
-                            <a class="brand" href="#">Title</a>
+                            <a class="brand" href="#">TDC Floripa</a>
                             <div class="nav-collapse subnav-collapse">
                                 <ul class="nav">
                                     <li><a href="#all">Home</a></li>
