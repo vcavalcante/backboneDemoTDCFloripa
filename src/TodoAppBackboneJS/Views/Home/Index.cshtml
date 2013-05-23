@@ -67,7 +67,9 @@
 
             },
             tagName: "ul",
-            render:function() {
+            render: function (data) {
+                if (data)
+                    this.collection = data;
                 this.$el.empty();
                 this.collection.forEach(this.addOne, this);
                 return this;
@@ -117,15 +119,22 @@
                 //$("#app").html("<h1>index</h1>");
             },
             all:function() {
-                //$("#app").html("<h1>All</h1>");
+                App.Views.todos.render(App.Collections.todos);
             },
 
             done: function () {
-                //$("#app").html("<h1>Done</h1>");
+                var todos = App.Collections.todos.filter(function(todo) {
+                    return (todo.get("status") === 'complete');
+                });
+                App.Views.todos.render(todos);
+
             },
 
             todo: function () {
-                //$("#app").html("<h1>todo</h1>");
+                var todos = App.Collections.todos.filter(function (todo) {
+                    return (todo.get("status") === 'incomplete');
+                });
+                App.Views.todos.render(todos);
             },
         });
 
@@ -135,6 +144,28 @@
     <body>
         <div class="container">
             <div class="row">
+                <div class="navbar navbar-inverse  ">
+                    <div class="navbar-inner">
+                        <div class="container">
+                            <a class="btn btn-navbar" data-toggle="collapse" data-target=".subnav-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </a>
+                            <a class="brand" href="#">Title</a>
+                            <div class="nav-collapse subnav-collapse">
+                                <ul class="nav">
+                                    <li><a href="#all">Home</a></li>
+                                    <li><a href="#todo">Todo</a></li>
+                                    <li><a href="#done">Done</a></li>
+
+                                </ul>
+                            </div>
+                            <!-- /.nav-collapse -->
+                        </div>
+                    </div>
+                    <!-- /navbar-inner -->
+                </div>
                 <div class="well" id="app">
                     <form>
                         
