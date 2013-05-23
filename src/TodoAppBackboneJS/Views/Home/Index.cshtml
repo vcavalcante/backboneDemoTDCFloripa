@@ -40,8 +40,19 @@
                 return this.$el;
             }
         });
-        
-        
+
+        App.Views.Todos = Backbone.View.extend({
+            tagName: "ul",
+            render:function() {
+                this.$el.empty();
+                this.collection.forEach(this.addOne, this);
+                return this;
+            },
+            addOne:function(todo) {
+                var todoView = new App.Views.Todo({ model: todo });
+                this.$el.append(todoView.render());
+            }
+        });
 
 
     </script>
