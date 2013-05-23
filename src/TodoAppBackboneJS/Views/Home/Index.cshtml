@@ -8,7 +8,9 @@
 
         }
     </style>
-    <script src="~/Scripts/jquery-1.7.2.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.9.1.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
     <script type="text/javascript">
@@ -62,7 +64,6 @@
             initialize:function() {
                 this.listenTo(this.collection, "add", this.addOne, this);
                 this.listenTo(this.collection, "reset", this.render, this);
-                this.listenTo(this.collection, "sync", this.render, this);
                 this.listenTo(this.collection, "destroy", this.render, this);
 
             },
@@ -84,13 +85,13 @@
             tagName: "form",
             className: "input-append",
             template: _.template("<input type='text' placeholder='Todo' /><button class='btn'>Inserir</button>"),
-            render: function () {
+            render: function (e) {
+                
                 this.$el.html(this.template());
                 return this;
             },
             events: {
                 "submit": "criaTodo"
-
             },
             criaTodo: function (e) {
                 e.preventDefault();
