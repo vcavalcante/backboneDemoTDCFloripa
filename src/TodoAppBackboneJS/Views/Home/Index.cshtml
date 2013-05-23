@@ -31,8 +31,18 @@
             model: App.Models.Todo,
             url:"/api/todo"
         });
+
+        App.Views.Todo = Backbone.View.extend({
+            tagName: "li",
+            template: _.template("<label> <input type='checkbox'  <% if(status=='complete') print('checked') %> /> <%=description%> </label>"),
+            render:function() {
+                this.$el.append(this.template(this.model.toJSON()));
+                return this.$el;
+            }
+        });
         
         
+
 
     </script>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
