@@ -16,7 +16,6 @@
         };
 
         App.Models.Todo = Backbone.Model.extend({
-            urlRoot: '/api/todo',
             defaults: {
                 "status":"incomplete"
             },
@@ -28,6 +27,11 @@
                 }
             }
         });
+        App.Collections.Todo = Backbone.Collection.extend({
+            model: App.Models.Todo,
+            url:"/api/todo"
+        });
+        
         
 
     </script>
