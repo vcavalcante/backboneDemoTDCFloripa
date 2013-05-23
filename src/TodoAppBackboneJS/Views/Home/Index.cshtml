@@ -63,6 +63,8 @@
                 this.listenTo(this.collection, "add", this.addOne, this);
                 this.listenTo(this.collection, "reset", this.render, this);
                 this.listenTo(this.collection, "sync", this.render, this);
+                this.listenTo(this.collection, "destroy", this.render, this);
+
             },
             tagName: "ul",
             render:function() {
@@ -76,11 +78,33 @@
             }
         });
 
+        App.Views.AddTodo = Backbone.View.extend({
+            tagName: "form",
+            className: "input-append",
+            template: _.template("<input type='text' placeholder='Todo' /><button class='btn'>Inserir</button>"),
+            render: function () {
+                this.$el.html(this.template());
+                return this;
+            },
+            events: {
+                "submit": "criaTodo"
+
+            },
+            criaTodo: function (e) {
+                e.preventDefault();
+                var input = this.$el.find("input");
+                this.collection.create({ description: input.val() });
+                input.val("");
+            }
+        });
+
         App.Router = Backbone.Router.extend({
             initialize:function() {
                 App.Collections.todos = new App.Collections.Todo({ model: App.Models.Todo });
                 App.Views.todos = new App.Views.Todos({ el: $("#app ul"), collection: App.Collections.todos });
                 App.Collections.todos.fetch();
+                App.Views.addTodo = new App.Views.AddTodo({ el: "#app form", collection: App.Collections.todos });
+                App.Views.addTodo.render();
             },
             routes: {
                 "":"index",
@@ -112,6 +136,9 @@
         <div class="container">
             <div class="row">
                 <div class="well" id="app">
+                    <form>
+                        
+                    </form>
                     <ul>
                         
                     </ul>
