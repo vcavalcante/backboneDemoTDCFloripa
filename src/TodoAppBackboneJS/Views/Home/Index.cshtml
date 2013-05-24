@@ -13,7 +13,9 @@
             start: function () { }
         };
         App.Models.Todo = Backbone.Model.extend({
-            urlRoot: '/api/todo',
+            defaults: {
+                'status':'imcomplete'
+            },
             toggleStatus: function () {
                 if (this.get('status') === 'incomplete') {
                     this.set('status', 'complete');
@@ -23,7 +25,11 @@
                 this.save();
             }
         });
-        
+
+        App.Collections.Todo = Backbone.Collection.extend({
+            model: App.Models.Todo,
+            url:"api/todo"
+        });
 
     </script>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
